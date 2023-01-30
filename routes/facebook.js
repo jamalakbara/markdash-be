@@ -1,11 +1,11 @@
 import express from 'express'
 
-import { getData, getFacebook } from '../controllers/facebook.js'
+import { getOverview, getFacebook } from '../controllers/facebook.js'
 
 const router = express.Router()
 
 router.get('/', getFacebook)
 
-router.post('/data', getData)
+router.post('/overview', getOverview)
 
 export default router
