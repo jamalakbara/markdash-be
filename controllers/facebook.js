@@ -46,10 +46,47 @@ export const getOverview = async (req, res) => {
     )
   }
 
+  const defaultFilter = [
+    {
+      field: "action_type",
+      operator: "IN",
+      value: [
+        'omni_view_content', 
+        'omni_add_to_cart', 
+        'landing_page_view', 
+        'link_click', 
+        'omni_purchase', 
+        'omni_initiated_checkout', 
+        'post_engagement', 
+        'lead', 
+        'post_engagement', 
+        'onsite_conversion.post_save', 
+        'post_reaction', 
+        'comment', 
+        'post', 
+        'outbound_click', 
+        'video_view', 
+        'offsite_conversion.fb_pixel_custom', 
+        'omni_complete_registration', 
+        'submit_application_total', 
+        'onsite_conversion.messaging_first_reply', 
+        'onsite_conversion.messaging_block', 
+        'onsite_conversion.messaging_conversation_started_7d'
+      ]
+    }
+  ]
+
+  let filtering = JSON.stringify(defaultFilter)
+
   let request_url = `${process.env.FB_URI}/${process.env.FB_VER}/${ad_account_id}/insights`
   request_url     += `?fields=${fields}`
+  request_url     += `&level=account`
   request_url     += `&access_token=${access_token}`
   request_url     += `&time_ranges=${time_range}`
+  // request_url     += `&filtering=${filtering}`
+  request_url     += `&action_attribution_windows=["7d_click","1d_view"]`
+  request_url     += `&use_account_attribution_setting=true`
+  // request_url     += `&use_unified_attribution_setting=true`
 
   await axios.get(request_url)
     .then(response => {
@@ -109,12 +146,14 @@ const _format_overview = (facebook_data, metrics, date) => {
     }
 
     data = {
+      ...data,
       ...facebook_data[date],
-      [metric.child]: value,
+      [metric.name]: value,
     }
 
     delete data.actions
     delete data.action_values
+    delete data.cost_per_action_type
     delete data.date_start
     delete data.date_stop
   })
