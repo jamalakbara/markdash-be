@@ -1,10 +1,6 @@
 // const axios = require('axios').default
 import axios from "axios"
-import { metricParentOverview,metricChildOverview } from "../request/facebook.js"
-
-export const getFacebook = (req, res) => {
-  res.send('this works')
-}
+import { metricParentOverview,metricChildOverview } from "../../request/facebook/overview.js"
 
 export const getOverview = async (req, res) => {
   const {

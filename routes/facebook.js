@@ -1,11 +1,11 @@
 import express from 'express'
 
-import { getOverview, getFacebook } from '../controllers/facebook.js'
+import { getOverview } from '../controllers/facebook/overview.js'
+import { getPeriodic } from '../controllers/facebook/periodic.js'
 
 const router = express.Router()
 
-router.get('/', getFacebook)
-
 router.post('/overview', getOverview)
+router.post('/periodic', getPeriodic)
 
 export default router
