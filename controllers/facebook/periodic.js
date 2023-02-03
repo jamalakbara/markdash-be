@@ -1,7 +1,7 @@
 import { metricParent, metricChild } from "../../request/facebook/periodic.js"
 import axios from "axios"
 
-export const getPeriodic = (req, res) => {
+export const getPeriodic = async (req, res) => {
   const {
     ad_account_id,
     access_token,
@@ -59,10 +59,20 @@ export const getPeriodic = (req, res) => {
   request_url     += `&time_increment=1`
   request_url     += `&limit=400`
 
-  axios.get(request_url)
+  await axios.get(request_url)
     .then(response => {
+      const raw_data = response.data
+      
+      const period = raw_data["data"].map(dt => {
+        return dt.date_start
+      })
 
-      res.status(200).json(response.data)
+      let metric_values = {}
+      raw_data["data"].forEach(dt => {
+        
+      })
+
+      res.status(200).json(raw_data)
     })
     .catch(error => res.status(400).json(error))
 }
